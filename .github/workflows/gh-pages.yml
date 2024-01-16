@@ -29,7 +29,7 @@ jobs:
       - name: building
         run: |
           pnpm install
-          pnpm run vite:build
+          pnpm run build
 
       - name: Deploy 🚀
         uses: peaceiris/actions-gh-pages@v3
