@@ -1,0 +1,39 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main # 当master分支有变更，则执行以下jobs操作
+
+env:
+  TARGET: gh-page # 部署分支
+
+jobs:
+  deploying_shopify_vite_project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2.3.1
+        
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "20.x"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2.4.0
+        with:
+          # Version of pnpm to install
+          version: latest
+
+      - name: building
+        run: |
+          pnpm install
+          pnpm run vite:build
+
+      - name: Deploy 🚀
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: ${{ env.TARGET }}
